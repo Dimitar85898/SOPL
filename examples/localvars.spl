@@ -1,17 +1,14 @@
-extern "C" printf
-extern "C" exit
+extern "C" printf(ptr, long : int);
+
 func hello() {
     let z: long
-    z = 5
+    z = 5l
 }
-func main(int, ptr : int) {
+func main() {
     let x: long
     let y: long
     x = 4l
     y = 4l
     x y +
-    "Goodbye World!\n" pop printf pop pop
-    "Hello World!\n\t" pop printf pop pop
-    x push 
-    "Hi %ld" pop printf pop pop
+    printf("Hi %ld"c, x);
 }

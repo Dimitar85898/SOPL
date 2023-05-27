@@ -1,0 +1,18 @@
+extern "C" printf(ptr, long : int);
+extern "C" puts(ptr: int);
+const A = 5l ;
+const B = 4l ;
+const C = 4l 5l + ;
+const D = A B C + + ;
+const Hello = "Hello";
+const World = "World";
+const HelloWorld = Hello World + ;
+
+func main() {
+    printf("%ld"c,D);
+    // D "%d"c printf
+    // EAX pop
+    // pop
+    
+    puts(HelloWorld);
+}

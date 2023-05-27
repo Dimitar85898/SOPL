@@ -1,4 +1,4 @@
-extern "C" printf
-func main(int, ptr : int) {
-    "Hello World!"c printf pop
+extern "C" puts(ptr : int);
+func main() {
+    puts("Hello World!"c)
 }

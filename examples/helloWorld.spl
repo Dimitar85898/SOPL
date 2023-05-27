@@ -1,5 +1,9 @@
-include "./functions.spl"
-
-func main(int, ptr : int) {
-    sayHelloWorld
+extern "C" puts(ptr : int);
+func printstr(a: ptr) {
+    let cpy: ptr;
+    cpy = a
+    puts(cpy)
+}
+func main() {
+    printstr("Hello World!"c)
 }

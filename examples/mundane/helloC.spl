@@ -1,0 +1,4 @@
+include "../src/C/stdio.spl"
+func main() {
+    puts("Hello World!\n"c)
+}

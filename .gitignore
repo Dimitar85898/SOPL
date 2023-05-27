@@ -1,10 +1,16 @@
 /target
 /syntax
 /.idea
+/.vscode
 /examples/bin/
 /examples/int/
 /examples/raw/
+/examples/debug/
+/tests/
 names.txt
 ideas.txt
 build.py
 debug.log
+/src/std.spl
+/editor/
+/waterfall/
