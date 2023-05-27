@@ -1,5 +1,0 @@
-include "../src/C/stdio.spl"
-func main() {
-    // Prints hello world :D
-    printf("Hello World!\n"c)// Prints hello world :D
-}

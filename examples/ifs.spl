@@ -1,11 +1,13 @@
-extern "C" puts(ptr : int)
-func main() { 
+extern "C" printf
+extern "C" exit
+func main(int, ptr : int) { 
     RBX = 5
     R8 = 5
     if RBX R8 == {
-        puts("Hello World!"c)
+        "Hello World!" pop printf pop
     }
     else {
-        puts("Goodbye World!"c)
+        "Goodbye World!" pop printf pop
     }
+    0l exit
 }
