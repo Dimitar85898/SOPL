@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-extern "C" printf
-extern "C" exit
-func main(int, ptr : int) { 
-    RBX = 5
-    R8 = 5
-    if RBX R8 == {
-        "Hello World!" pop printf pop
-    }
-    else {
-        "Goodbye World!" pop printf pop
-=======
 extern "C" puts(*char : int);
 extern "C" printf(*char, bool : int);
 func main(){
@@ -24,7 +12,6 @@ func main(){
     }
     else {
         puts("Bye!!!"c);
->>>>>>> dev
     }
     0l exit
 }

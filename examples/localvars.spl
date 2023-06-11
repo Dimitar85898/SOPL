@@ -2,20 +2,6 @@ extern "C" printf
 extern "C" exit
 func hello() {
     let z: long
-<<<<<<< HEAD
-    z = 5
-}
-func main(int, ptr : int) {
-    let x: long
-    let y: long
-    x = 4l
-    y = 4l
-    x y +
-    "Goodbye World!\n" pop printf pop pop
-    "Hello World!\n\t" pop printf pop pop
-    x push 
-    "Hi %ld" pop printf pop pop
-=======
     z = 5l;
 }
 func main() {
@@ -25,5 +11,4 @@ func main() {
     y = 4l;
     x += y;
     printf("Hi %ld\n"c, x);
->>>>>>> dev
 }

@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-include "./functions.spl"
-
-func main(int, ptr : int) {
-    sayHelloWorld
-=======
 extern "C" puts(*char : int);
 func printstr(a: *char) {
     puts(a)
 }
 func main() {
     printstr("Hello World!"c)
->>>>>>> dev
 }
