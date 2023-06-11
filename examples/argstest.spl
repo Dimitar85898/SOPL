@@ -1,0 +1,11 @@
+//TODO: fix tests with printf, since printf no longer works
+
+extern "C" printf(*char, int : int);
+func main(argc: int,argv: ptr) {
+    // RAX = argc1
+    // RAX 1 +
+    // RAX 8 *
+    // argc1 = RAX
+    // argc1 = (argc + 1) * 8
+    printf("Amount of arguments: %d\n"c, argc);
+}

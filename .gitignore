@@ -4,7 +4,24 @@
 /examples/bin/
 /examples/int/
 /examples/raw/
+<<<<<<< HEAD
 names.txt
 ideas.txt
 build.py
 debug.log
+=======
+/examples/debug/
+/examples/tests/
+/tests/
+names.txt
+ideas.txt
+build.py
+debug.log
+/src/std.spl
+/editor/
+/waterfall/
+/tools/.vscode
+/tools/sopl_test.exe
+/tools/sopl_test/target/
+/doodle/
+>>>>>>> dev

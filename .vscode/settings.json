@@ -1,0 +1,9 @@
+{
+    "C_Cpp.errorSquiggles": "enabled",
+    "files.associations": {
+        "*.bl": "blang",
+        "*.spl": "sopl",
+        "*.hspl": "sopl",
+        "stdio.h": "c"
+    }
+}

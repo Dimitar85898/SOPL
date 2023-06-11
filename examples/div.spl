@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 extern "C" printf
 func main(int, ptr : int) {
     let a: long
@@ -12,4 +13,30 @@ func main(int, ptr : int) {
     "Got to here 3\n" pop printf pop 
     a push "%ld" pop printf pop pop
     b push "%ld" pop printf pop pop
+=======
+extern "C" puts(ptr : int);
+extern "C" printf(ptr, long : int);
+func main() {
+    let a: long;
+    let b: long;
+    a = 8;
+    b = 4;
+    a /= b;
+    printf("Division: %ld\n"c, a)
+    printf("Mod: %ld\n"c, b)
+
+    // let a: long
+    // let b: long
+
+    // "Got to here\n"c printf EAX pop 
+    // RBX = 4
+    // RCX = 2
+    // RBX RCX /
+    // a RBX =
+    // b RCX =
+    // "Got to here 3\n"c printf EAX pop 
+    // a push "%ld"c printf EAX pop
+    // b push "%ld"c printf EAX pop
+
+>>>>>>> dev
 }

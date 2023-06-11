@@ -1,0 +1,19 @@
+{
+    "bits": 64,
+    "os":"mac",
+    "options": {
+        "argumentPassing": {
+            "num_ptrs": ["RCX","RDX","R8","R9"],
+            "floats": ["XMM0","XMM1","XMM2","XMM3"],
+            "returns": ["RAX"],
+            "on_overflow_stack": true,
+            "shadow_space": 0
+        }
+    },
+    "obj-extension": "o",
+    "flags": {
+        "nasm": ["-f","macho64"]
+    },
+    "func_prefix": "",
+    "cextern_prefix": ""
+}

@@ -1,22 +1,33 @@
 # SOPL
-Stack-oriented Programming Language
+A C like Programming Language
+
+With Rust like syntax with the same amount of low level programming as C
 
 ## About
 
 > What is sopl?
 
-Sopl is a lightweight, easily extendable, stack-oriented language.
+Sopl is a lightweight, easily extendable, programming language language.
 It is currently in it's very early stages and is syntacically bound to change over time. I'll try to not change it semantically too much but be warned if you are using it to build projects yourself as things may break over versions.
 For more info on current versions checkout [versions.txt](version.txt)
 
 **Manual:**
 Made for easy navigation around the README.md
-- [Plans](#plans)
+- [Quickstart](#quickstart)
 - [Build platforms](#build)
 - [Requirements](#Requirements)
 - [Startup](#startup)
+- [Flags and versions](#flags-and-versions)
 - [How-to-use](#how-to-use)
   - [Hello-World](#hello-world)
+  - [Locals](#locals)
+  - [Constants](#constants)
+  - [Expressions](#expressions)
+  - [Including](#including)
+  - [Functions](#functions)
+  - [Control-flow](#control-flow)
+  - [Strings](#strings)
+  - [Managing-c-functions](#managing-c-functions-and-their-return-values)
   - [Externals](#extern)
   - [functions](#functions)
   - [including](#including)
@@ -44,10 +55,26 @@ Made for easy navigation around the README.md
   - [ ] for statements
 - [x] locals
 - [ ] type checking
+  - [x] Function type checking
+  - [ ] Branching
 - [ ] structs
 - [ ] struct methods
 - [ ] interfaces
 
+
+## Quickstart
+```cmd
+cargo run (File path) <-o (Output path)> <-t (PLATFORM)>
+```
+Another thing worth noting:
+[NOTE] If you are experiencing an error of the following type:
+```
+[NOTE] No architecture found for {OS}_{Arch}! Please specify the output architecture!
+```
+It is probably because the compiler can't find a proper architecture for your current operating system and Arch. To fix this you can use the -arc flag with | and the path to the architecture configuration (examples [here](examples/arcs/), This should fix the error although it could cause issues if the configuration isn't correct) Like so:
+```
+cargo run nasm_x86_64 myprogram.spl -arc | myarcconfig.json 
+```
 
 ## Build
 > Build platforms: 
@@ -65,7 +92,7 @@ Ideas that are left for discussion and further expansion:
 [NOTE] that whilst registers are really powerful and useful for building with x86 64, they might get 'discontinued' after Java integration. They will have support for nasm but in the future their usage will be warned and their features replaced by more modern ones. Deprecation isn't expected any time soon but when the majority of the boxes under 'plans' are ticked off you probably will expect deprecation of them. 
 For anyone wandering things like interrupts are probably going to be handled like so:
 ```sopl
-interrupt 128, 1, 1, "Hello World!" // Print Hello World! on linux
+interrupt 128 
 ```
 ## Requirements
 **NASM**:
@@ -75,29 +102,117 @@ interrupt 128, 1, 1, "Hello World!" // Print Hello World! on linux
 ```cmd
 cargo run (PLATFORM) (File path) -o (Output path)
 ```
+Another thing worth noting:
+[NOTE] If you are experiencing an error of the following type:
+```
+[NOTE] No architecture found for {OS}_{Arch}! Please specify the output architecture!
+```
+It is probably because the compiler can't find a proper architecture for your current operating system and Arch. To fix this you can use the -arc flag with | and the path to the architecture configuration (examples [here](examples/arcs/), This should fix the error although it could cause issues if the configuration isn't correct) Like so:
+```
+cargo run nasm_x86_64 myprogram.spl -arc | myarcconfig.json 
+```
+## Flags and Versions
+
+Whenever something gets added you will see that in 99% of the time [version.md](version.md) gets updated. Thats because it contains the necessary information about any new versions that come out.
+Whilst the README is updated oftenly, for the most modern features you might have to check out the [version.md](version.md) since it contains any information on the latest patches and updates. 
+It also gives you a timeline of the most recent changes (newest -> oldest).
+
+Flags are really important and if not updated here, you can always check out what flag support there is by just running the compiler without anything (This will display information such as the usage, the currently supported builds and any flags you might want to use).
+
+As of [0.11A](version.md#011a) flags consist of:
+```
+--------------------------------------------
+(output language) (input path) [flags]
+    Output Language:
+        - nasm_x86_64
+    flags:
+        -o (output path)                    -> outputs to that file (example: hello.asm in nasm_x86_64 mode). If the output path is not specified it defaults to the modes default (for nasm_x86_64 thats a.asm)
+        -r                                  -> builds the program for you if the option is available for that language mode (for example in nasm_x86_64 it calls nasm with gcc to link it to an executeable)
+        -noRaxWarn                          -> removes the RAX usage warning for nasm
+        -release                            -> builds the program in release mode
+        -ntc                                -> (NoTypeChecking) Disable type checking
+        -nou (all, funcs, externs, strings) -> Disable unused warns for parameter
+        -callstack (size)                   -> Set callstack size.
+                                               The name is very deceiving but callstack is now only used for locals as of 0.0.6A (checkout versions.md)
+                                               [NOTE] it is planned for -callstack to be deprecated for instead using the stack as a way to store variables with the new function system
+        -arc (builtin arc)                  -> builds for a builtin architecture
+        -arc | (path to custom arc)         -> builds for a custom architecture following the syntax described in ./examples/arcs
+--------------------------------------------
+```
+
+## Plans
+> Source
+- [x] externals
+- [x] strings
+- [x] register access
+- [x] includes
+- [x] functions
+- [x] constants
+- [ ] control flow
+  - [x] if statements
+  - [x] else statements
+  - [x] while statements
+  - [ ] else if statements
+  - [ ] for statements
+- [x] locals
+- [x] type checking
+  - [x] Function type checking
+- [ ] structs
+- [ ] struct methods
+- [ ] interfaces
+
 ## How to use?
 *Note that documentation may not cover all of the latest features tho you might expect updates on them shortly after implementation*
+*If you want to learn most of the details checkout theversions*
+
 ### Hello World!
 ```sopl
-extern "C" printf
+extern "C" printf(ptr : int)
 
 func main(int, ptr : int) {
   "Hello World!\n"c printf pop
 }
 ```
 ### extern
-> -> Pre 0.0.1A
-
+  * Changed syntax in [0.11A](version.md#011a)
+  * Added Files related in [0.7A](version.md#07a):
+    - [stdio.spl](src/C/stdio.spl)
+    - [stdlib.spl](src/C/stdlib.spl)
+  * Added in Pre 0.1A
 **Syntax**:
 ```
-extern [TYPE] (name)
+extern [TYPE] (name) <(extern contract)>;
 ```
 Extern is a way to access outside features of the language or link to functions from other languages such as IO implementations from C etc.
-It has to be noted here that using extern on its own can sometimes lead to unexpected behavior or program slowdowns as most externs don't get type checked automatically and
+It has to be noted here that using extern on its own can sometimes lead to unexpected behavior ~~or program slowdowns as most externs don't get type checked automatically~~ (as of 0.11A externs ARE typechecked) and
 might not be available for the current mode you are running in like if you try to link to standard C functions when you are in JAVA mode.
 
-Thats also a reason why externs are generally not recommended for direct use (although depending on your version it might be required to use them raw (currently its required)).
+Thats also a reason why externs are generally not recommended for direct use (although depending on your version it might be required to use them raw (currently its not required - use stdio.spl, stdlib.spl directly instead of listing externs every time :D. If you want to implement any C library you can do that and share the information online)).
+
+Externs are really powerful if you want to link to libraries that aren't previously implement and are generally really good to use for building things that require platform specific things such as Windows applications etc.
+
+**Example(s)**:
+```
+extern "C" puts(ptr : int); // Links with puts from C
+func main(){
+  puts("Hello World"c) // uses it to print a string to the console
+}
+```
+
+```
+extern "C" puts(ptr : int); // Links with puts from C
+func main(){
+  "Hello World"c
+  puts(top) // uses it to print a string to the console (copying it) from the top of the stack
+  puts(top)
+  puts(top)
+  pop
+}
+```
 ### functions
+* 0.11A Changed how functions are called with the introduction of argument contracts
+* 0.6A Changed to now have named parameters
+* Pre 0.1A
 
 **Syntax**:
 ```
@@ -105,50 +220,77 @@ func (name) ((contract)) {
 
 }
 ```
-Functions, just like in other languages have a name and a body. In sopl however you have to provide a contract:
+Functions, just like in other languages have a name and a body. In sopl, you have to provide a contract:
 
-A contract is a way to tell the type checker what to expect to have when it calls your function and in what state the top of the stack is going to be afterwards.
+A contract is a way to tell the type checker what to expect to have put onto the stack after it calls your function.
 The contract contains:
 (Input parameters separated by , : Output parameters separated by ,)
 
-Inside of functions you can use the "ret" keyword to return although it is automatically done for you at the end of the functions declaration.
+Some things that should be noted are that you really really really shouldn't be using more than one Output parameter type, since the language doesn't support multiple returns (Outputs were kept this way because of the old x86 days and the return stack).
+Inside of functions you can use the "return" keyword to return although it is automatically done for you at the end of the functions declaration that don't have a return type.
 
 **Example(s)**:
 ```sopl
 func sayHello() {
    "Hello World!\n"c printf pop
 }
-func counter(long : long) {
-    RBX pop
-    RCX = 1
-    RBX RCX -
-    RBX push
+func counter(c: long : long) {
+  // Old syntax:
+  //RBX pop
+  //RCX = 1
+  //RBX RCX -
+  //RBX push
+  //counter
+  //RBX pop
+  //pop
+  //rs RBX push
+
+  // New (planned) syntax:
+  c -= 1
+  counter(n) 
+  rs RAX push
 }
 ```
 
-### including
-> -> Pre 0.0.1A
+As of 0.6A, there is a new keyword called 'rs' short for "Return stack"
+As of 0.11A, the 'rs' keyword is planned to be deprecated, and instead replaced with the new syntax and C standard
 
-**Syntax**
-```spl
-include "Path/To/File"
+### including
+* Pre 0.1A
+
+**Examples:**
+```sopl
+let a: int;
+let b: int;
+let c: bool;
+a = 5;
+b = 4;
+if a==b {
+  printf("Nice!"c);
+}
+else {
+  printf("Not nice!"c);
+}
 ```
 Functions.spl:
 ```spl
-extern "C" printf
+extern "C" puts(ptr : int)
 func sayHello() {
-  "Hello World!\n"c printf pop
+  printf("Hello World!")
 }
 ```
 HelloWorld.spl:
 ```spl
 include "./Functions.spl"
-func main(int, ptr : int) {
-  sayHello
+func main() {
+  sayHello()
 }
 ```
 ### registers
-> -> Pre 0.0.1A
+
+* Added float registers and the last remaining r\<n\> registers in [0.11A](version.md#011a)
+* Added the majority of the registers Pre 0.1A
+
 Current register support:
 - [x] RAX
   - [x] EAX
@@ -175,17 +317,28 @@ Current register support:
 - [x] RBP
   - [x] EBP
 
+All of their sub types respectfully:
+- [x] R8
+- [x] R9
+- [x] R10
+- [x] R11
+- [x] R12
+- [x] R13
+- [x] R14
+- [x] R15
+
+- [x] XMM0
+- [x] XMM1
+- [x] XMM2
+- [x] XMM3
+
+
 **[NOTE] RAX is used for returning longs/int/shorts/chars for C functions and your functions so usage of it outside of that is not advised** 
 **Syntax**
 ```
 (RegisterName) (Op | RegisterName) [Op]
 ```
 **Example(s)**
-```sopl
-RBX pop   // Pops RBX off the stack
-RCX = 4   // sets RCX
-RBX RCX + // Adds RCX to RBX
-```
 
 Currently supported register operations:
 ```
@@ -193,9 +346,9 @@ Currently supported register operations:
 (REG1) (REG2) -  -> subtracts the second register from the first register (RESULT IN REG1)
 (REG1) (REG2) *  -> multiples the two registers     (RESULT IN REG1)
 (REG1) (REG2) == -> compares two registers (RESULT IN REG1)
-(REG1) (REG2) =  -> Moves the value from REG2 to REG1
-(REG1) push      -> pushes register onto the stack                          (WARNING: currently does not support 32 bit registers)
-(REG1) pop       -> pops the value off the stack and loads it into register (WARNING: currently does not support 32 bit registers)
+(REG1) = (REG2)  -> Moves the value from REG2 to REG1
+(REG1) push      -> pushes register onto the stack                          
+(REG1) pop       -> pops the value off the stack and loads it into register 
 pop              -> pops 64 bit value off the stack and loads it into RAX
 push             -> pushes RAX onto the stack
 ```
@@ -209,41 +362,43 @@ printf("%ld", 5);
 ```
 And here is the same code in sopl:
 ```sopl
-5l "%ld"c printf
+printf("%ld"c, 5l);
 ```
-As you can see the parameters get passed in a reversed order (thats because of how your parameters in C get passed to functions normally)
+~~As you can see the parameters get passed in a reversed order (thats because of how your parameters in C get passed to functions normally)~~
 
-As for returning values that are higher than 8 bytes, C pushes them on the stack together with everything else. 
+~~As for returning values that are higher than 8 bytes, C pushes them on the stack together with everything else.~~
 
 
 
 ### strings
-> Strings  -> Pre 0.0.1A 
-> CStrings -> 0.0.2A
+> Strings  -> Pre 0.1A 
+
+> CStrings -> 0.2A
+
 In sopl there are 2 different types of strings. There are:
 ```
-cstrings 
-strings
+dll_import "kernel.dll" CreateWindow(...);
 ```
 With the main difference being that cstrings don't push their length after the pointer to the string unlike normal strings.
-To define a string we use "" (escaping is supported). To define a cstring just add the letter C after the string.
+To define a string we use "" (escaping is supported). To define a cstring just add the letter c after the string.
 
 **Examples**
 
 ```sopl
-func main(int,ptr: int) {
-  "Hello World!" pop printf pop
-  "Foo Bar!"c printf pop
+func main() {
+  printf("Hello World!"c)
+  printf("Foo Bar!"c)
 }
 ```
 
-**[NOTE] It is generally recommended to use cstrings whenever possible if the function doesn't use the length as a parameter. In < 0.0.1A strings had to be pushed and then the length of them popped which is no longer sufficient and may cause your code to be inefficient**
+**[NOTE] It is generally recommended to use cstrings whenever possible if the function doesn't use the length as a parameter. In < 0.1A strings had to be pushed and then the length of them popped which is no longer sufficient and may cause your code to be inefficient**
 
 
 ### control flow
 
-> If     -> Pre 0.0.1A
-> Else   -> Pre 0.0.1A
+> If     -> Pre 0.1A
+
+> Else   -> Pre 0.1A
 
 **Syntax:**
 ```sopl
@@ -264,7 +419,7 @@ else {
 
 
 ### constants
-> -> Pre 0.0.1A
+* Pre 0.1A
 
 **Syntax:**
 ```sopl
@@ -285,11 +440,11 @@ const HelloWorldNine = HelloWorld C + ; // Concatenates the integers and strings
 In a constants expression can only be things that can be evaluated at compile time, such as Strings, Integers, Longs and other constants. If you try to use something like a function it would tell you that it doesn't recognize it as a constant value. 
 
 ### locals
-> -> Pre 0.0.1A
-  Add  -> Pre 0.0.1A
-  Set  -> Pre 0.0.1A
-  Push -> Pre 0.0.1A
-  Pop  -> Pre 0.0.1A
+* Pre 0.1A
+  * Add  -> Pre 0.1A
+  * Set  -> Pre 0.1A
+  * Push -> Pre 0.1A
+  * Pop  -> Pre 0.1A
 
 **Syntax:**
 ```sopl
@@ -307,7 +462,7 @@ push
 ```
 
 ### interrupts
-> -> 0.0.4A
+* 0.4A
   
 Interrupts are essential for anything you build on platforms such as linux if you don't want to use libc. Whilst they aren't useful as much on windows machines WSL could be used to make linux syscalls into something which can run on windows.
 

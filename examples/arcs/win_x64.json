@@ -1,0 +1,19 @@
+{
+    "bits": 64,
+    "os":"windows",
+    "options": {
+        "argumentPassing": {
+            "num_ptrs": ["RCX","RDX","R8","R9"],
+            "floats": ["XMM0","XMM1","XMM2","XMM3"],
+            "returns": ["RAX"],
+            "on_overflow_stack": true,
+            "shadow_space": 32
+        }
+    },
+    "obj-extension": "obj",
+    "flags": {
+        "nasm": ["-f","win64"]
+    },
+    "func_prefix": "",
+    "cextern_prefix": ""
+}
